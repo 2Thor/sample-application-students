@@ -1,46 +1,46 @@
 git:
-    depth: 5
+  depth: 5
   
-  stages:
-    - "Build and Test"
-    - "Package"
+stages:
+  - "Build and Test"
+  - "Package"
+
+jobs:
+  include:
+    - stage: "Build and Test"
+      language: java
+      jdk: oraclejdk11
+      before_script:
+        - cd sample-application-backend
+      script:
+        - echo "Maven build"
+        - echo "Run test coverage and Quality Gate"
+    - stage: "Build and Test"
+      language: node.js
+      node_js: "12.20"
+      before_script:
+        - cd sample-application-frontend
+      script:
+        - echo "NPM install and build"
+    - stage: "Package"
+      before_script:
+        - cd sample-application-backend
+      script:
+        - docker build -t 2thor/back_sample_application_students .
+        - docker login -u $DOCKERUSR -p $DOCKERPSW
+        - docker push 2thor/back_sample_application_students
+    - stage: "Package"
+      before_script:
+        - cd sample-application-frontend
+      script:
+        - docker build -t 2thor/front_sample_application_students .
+        - docker login -u $DOCKERUSR -p $DOCKERPSW
+        - docker push 2thor/front_sample_application_students
   
-  jobs:
-    include:
-      - stage: "Build and Test"
-        language: java
-        jdk: oraclejdk11
-        before_script:
-         - cd sample-application-backend
-        script:
-         - echo "Maven build"
-         - echo "Run test coverage and Quality Gate"
-      - stage: "Build and Test"
-        language: node.js
-        node_js: "12.20"
-        before_script:
-          - cd sample-application-frontend
-        script:
-          - echo "NPM install and build"
-      - stage: "Package"
-        before_script:
-          - cd sample-application-backend
-        script:
-          - docker build -t 2thor/back_sample_application_students .
-          - docker login -u $DOCKERUSR -p $DOCKERPSW
-          - docker push 2thor/back_sample_application_students
-      - stage: "Package"
-        before_script:
-          - cd sample-application-frontend
-        script:
-          - docker build -t 2thor/front_sample_application_students .
-          - docker login -u $DOCKERUSR -p $DOCKERPSW
-          - docker push 2thor/front_sample_application_students
+cache:
+  directories:
+    - "$HOME/.m2/repository"
+    - "$HOME/.npm"
   
-  cache:
-    directories:
-      - "$HOME/.m2/repository"
-      - "$HOME/.npm"
-  
-  services:
-    - docker
+services:
+  - docker
