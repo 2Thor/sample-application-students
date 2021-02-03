@@ -46,7 +46,7 @@ cache:
 services:
   - docker
 
-addons​:​
-  sonarcloud​:​
-    organization​: ​"2thor"​
-    token​: ​"$SONARCLOUD_TOKEN"
+addons:
+  sonarcloud:
+    organization: "2thor"
+    token: "$SONARCLOUD_TOKEN"
