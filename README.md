@@ -9,3 +9,5 @@ Simple Vue.js Client
 
 ## Database
 Simple Postgres 9 Database
+
+CD C:\Users\cleme\docker\tp2\
